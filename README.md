@@ -16,8 +16,6 @@ Overview
 -----
 Chess engines easily defeat the best chess players, but they do not provide reasoning for their evaluations. Thus, they are not very useful as training partners, despite their ability to accurately evaluate positions and suggest strong moves. Similar to the previous work of cgoldammer, this project seeks to create more "human" engines that can predict how complex or difficult positions are for  chessplayers.
 
--picture of chess engine evaluation
-
 Methodology
 =====
 We take [25,000 games evaluated by Stockfish (1sec/move)](https://www.kaggle.com/c/finding-elo/data) on Kaggle and process them into training examples mapping the position (1x769 a binary vector with the locations of the pieces and whose turn it is) to the error of the move (calculated by the evaluation before the move minus the evaluation after the move). Similar to past work, we omit positions where the evaluation exceeds 300 centipawns (indicating a winning position), positions before move 12 (indicating opening theory), and scale errors so they do not exceed 100 centipawns. In addition, we also round errors below 30 centipawns to 0, as Stockfish at 1 second per move can sometimes indicate small errors even with perfect moves.
@@ -28,7 +26,9 @@ Unlike previous work, which mapped a position to an expected centipawn error usi
 
 Because there are significantly more positions with no error than error, we also trained with a subset of the positions with no error to remove bias from the training set. This prevents the classification network from predicting each position will have no error to minimize categorical loss.
 
--picture of the training examples by error
+![](images/30errorbelowcutoff.png)
+
+A graph of training examples versus error. There's significantly more positions with zero error.
 
 Furthermore, this approach gives chessplayers a better sense of the complexity of a position, as complex positions can involve deciding between the best move and an alternative, and the probability of choosing the right move and the cost of choosing the wrong move is more descriptive than mean error.
 
@@ -40,15 +40,17 @@ Results
 =====
 Almost all models achieved a 65% classification accuracy on the test set (around 0.63 categorical cross-entropy loss) and a mean-squared error loss of around 0.06 (about a 0.2 mean absolute error). The models are pretty successful in seperating complex positions from non-complex positions. Complexity is approximated by the probability of an error given by the classification model multiplied by the mean value of the error given by the regression model. However, this is a relative measurement of complexity, not a measure of expected centipawn loss. Below are three of the most complex positions (deemed by the 1900-2200 model, which trained on the most amount of data - roughly 100k positions) along with three of the simplest positions chosen out of 1000 random positions from the 2015 World Cup.
 
--picture of positions
+![](images/hardeasypositions.png)
+On the top are the hard positions, on the bottom are the easier positions.
 
 Comparison to Previous Results
 -----
 Despite some methodological changes from the previous work of cgoldammer that in theory should improve performance, such as more stable evaluations (running Stockfish for 1 second/move instead of 0.1 seconds per move) and using two neural networks to better balance the data, there is no significant evidence that this program evaluates complexity better than [cgoldammer's model](https://chessinsights.org/analysis/). Positions evaluated as relatively complicated by this model are likewise evaluated as relatively complicated by the other model. I believe there is little difference in performance because of the vast amount of data used to train the other model (770,000 examples versus 100,000). However, removing bias does seem to have produced more user-friendly predictions. As suspected, cgoldammer's model regression on a training set with a large majority of little error positions has resulted in both a low regression and blunder value.
 
-For instance, take the position in the upper right, estimated to have a chance of error of 77% and an error amount of 73 centipawns. If you are a chessplayer, try to find the best move for Black here.
+For instance, take the position in the upper right, estimated to have a chance of error of 77% and an error amount of 73 centipawns. Try to find the best move for Black here.
 
--insert pictures 
+![](images/chessinsightsblunder.png)
+![](images/chessinsightsloss.png)
 
 cgoldammer's model predicts that for an intermediate player (roughly 1600 elo) there is a 7% chance of a blunder. For an elo of 1000, there is an 11% chance of a blunder, and for an expert (roughly 2000 elo) there is a 5% chance of a blunder. The model also predicts a 44 centipawn loss for a 1600 player. This seems to imply that almost everyone will find the right move. However, the only move that gives Black a fighting chance is ...Qf4, which is a very difficult tactic to spot. Any other move loses at least 240 centipawns, which fits the criteria of a blunder. It is clear that the projections of the 1900-2200 elo model are more accurate, and most players will be challenged to find ...Qf4.
 

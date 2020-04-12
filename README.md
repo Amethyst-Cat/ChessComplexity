@@ -8,9 +8,13 @@ This project is based off of these resources:
 1) [Learning to Evaluate Chess Positions with Deep Neural Networks and Limited Lookahead](https://www.ai.rug.nl/~mwiering/GROUP/ARTICLES/ICPRAM_CHESS_DNN_2018.pdf) by Sabatelli et al. showing dense neural networks can approximate the Stockfish evaluation function.
 2) cgoldammer's work using dense networks to evaluate chess position complexity. [https://github.com/cgoldammer/chess-analysis/blob/master/position_sharpness.ipynb](https://github.com/cgoldammer/chess-analysis/blob/master/position_sharpness.ipynb)
 
+Accessing Files
+-----
+TBD
+
 Overview
 -----
-Chess engines are known to easily defeat even the best chess players, but they do not provide reasoning for their evaluations. Thus, they are not very useful as training partners, despite their ability to accurately evaluate positions and suggest perfect moves. Similar to the previous work of cgoldammer, this project seeks to create more "human" engines that can predict how complex or difficult positions are for human chessplayers.
+Chess engines easily defeat the best chess players, but they do not provide reasoning for their evaluations. Thus, they are not very useful as training partners, despite their ability to accurately evaluate positions and suggest strong moves. Similar to the previous work of cgoldammer, this project seeks to create more "human" engines that can predict how complex or difficult positions are for  chessplayers.
 
 -picture of chess engine evaluation
 
@@ -20,7 +24,7 @@ We take [25,000 games evaluated by Stockfish (1sec/move)](https://www.kaggle.com
 
 A Two-Headed Approach
 -----
-Unlike previous work, which mapped a position to an expected centipawn error using one dense network, we use two networks, one predicting whether or not the user made an error (the classification network) and one predicting how large an error would be if it were made (the regression network). Due to the massive amount of training examples with 0 error, we chose this approach to give our regression network more flexibility and prevent it from constantly outputting low error values to minimize mean-squared loss.
+Unlike previous work, which mapped a position to an expected centipawn error using only one dense network, we use two networks, one predicting whether or not the user made an error (the classification network) and one predicting how large an error would be if it were made (the regression network). Due to the massive amount of training examples with 0 error, we chose this approach to give our regression network more flexibility and prevent it from only outputting low error values to minimize mean-squared loss.
 
 Because there are significantly more positions with no error than error, we also trained with a subset of the positions with no error to remove bias from the training set. This prevents the classification network from predicting each position will have no error to minimize categorical loss.
 
@@ -34,7 +38,7 @@ We split the Kaggle game data into 5 rating categories (<1600, 1600-1900, 1900-2
 
 Results
 =====
-Almost all models achieved a 65% classification accuracy on the test set (around 0.63 categorical cross-entropy loss) and a mean-squared error loss of around 0.06 (about a 0.2 mean absolute error). The models are pretty successful in seperating complex positions from non-complex positions, sometimes making the mistake of classifying a messy position with only one legal move as a complex position. Complexity is approximated by the probability of an error given by the classification model multiplied by the mean value of the error given by the regression model. However, this is a relative measurement of complexity, not a measure of expected centipawn loss. Below are three of the most complex positions (deemed by the 1900-2200 model, which trained on the most amount of data - roughly 100k positions) along with three of the simplest positions chosen out of 1000 random positions from the 2015 World Cup.
+Almost all models achieved a 65% classification accuracy on the test set (around 0.63 categorical cross-entropy loss) and a mean-squared error loss of around 0.06 (about a 0.2 mean absolute error). The models are pretty successful in seperating complex positions from non-complex positions. Complexity is approximated by the probability of an error given by the classification model multiplied by the mean value of the error given by the regression model. However, this is a relative measurement of complexity, not a measure of expected centipawn loss. Below are three of the most complex positions (deemed by the 1900-2200 model, which trained on the most amount of data - roughly 100k positions) along with three of the simplest positions chosen out of 1000 random positions from the 2015 World Cup.
 
 -picture of positions
 
@@ -50,4 +54,14 @@ cgoldammer's model predicts that for an intermediate player (roughly 1600 elo) t
 
 Applications
 =====
-This project along with the work of cgoldammer strongly indicates that neural networks can classify positions based on their relative difficulty to humans. I believe such a program has massive applications to chess training. 
+This project along with the work of cgoldammer strongly indicates that neural networks can classify positions based on their relative difficulty to humans. Such a program has massive unrealized applications in the chess world, and websites like lichess and chess.com already have millions of computer-analyzed games to realize these opportunities.
+
+1) Chess Training - A program that can rank position difficulties can expand the boundaries of chess puzzles beyond tactics to all types of positions. As users solve more positions, there is no reason why the model can't update itself with this data to provide more personalized training as well.
+
+2) Elo Estimation - If rating was factored into the model (either as an input or by training many seperate models), models can be extended to estimate rating based on games.
+
+Notes and Improvements
+=====
+1) One minor erorr that can occur is the model sometimes classifies a messy position with only one legal move as a complex position. This might be fixable by adding more hand-crafted inputs to the network, like number of legal moves. The program was trained only on the position of the pieces on the board to minimize prior knowledge of chess.
+
+2) Hyperparameter tuning and model selection - I stuck to the models in the Sabatelli paper and cgoldammer's work, but there might be a better model. 

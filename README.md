@@ -1,6 +1,5 @@
 About
 =====
-
 Supervised learning to estimate the complexity of chess positions.
 
 This project is based off of these resources:
@@ -28,13 +27,13 @@ Because there are significantly more positions with no error than error, we also
 
 ![](images/30errorbelowcutoff.png)
 
-A graph of training examples versus error. There's significantly more positions with zero error.
+A historgram of training examples and error.
 
 Furthermore, this approach gives chessplayers a better sense of the complexity of a position, as complex positions can involve deciding between the best move and an alternative, and the probability of choosing the right move and the cost of choosing the wrong move is more descriptive than mean error.
 
 Network Architecture
 -----
-We split the Kaggle game data into 5 rating categories (<1600, 1600-1900, 1900-2200, 2200-2500, 2500+) and trained five regression models and five classification models. The <1600 elo regression model trained on less data, so it is a 100-5-1 dense model with relu activation and a 20% dropout in each layer except the output, and the classification model is a similar 100-5-2 model but with softmax for the output layer. For the other rating categories, the regression model is a 1048-500-50-1 dense model with relu activation and 20% for all layers except the output (taken from the Sabatelli paper), and the classification model is a similar 1048-500-50-2 with a softmax activation in the last layer. The classification models were trained on a dataset of 50% error positions and 50% non-error positions, and the regression models were trained on the error amounts in positions where the error exceeded 0. All models were trained with a learning rate of 0.001.
+We split the Kaggle game data into 5 rating categories (<1600, 1600-1900, 1900-2200, 2200-2500, 2500+) and trained five regression models and five classification models. All models had 20% dropout rates between dense layers (excluding output), and used relu to connect dense layers. Classification layers used softmax for output. The <1600 elo regression model trained on less data, so it is a 100-5-1 model. For the other rating categories, the models used were 1048-500-50 (taken from the Sabatelli paper). The classification models were trained on a dataset of 50% error positions and 50% non-error positions, and the regression models were trained on the error amounts in positions where the error exceeded 0. All models were trained with a learning rate of 0.001.
 
 Results
 =====
@@ -50,7 +49,6 @@ Despite some methodological changes from the previous work of cgoldammer that in
 For instance, take the position in the upper right, estimated to have a chance of error of 77% and an error amount of 73 centipawns. Try to find the best move for Black here.
 
 ![](images/chessinsightsblunder.png)
-![](images/chessinsightsloss.png)
 
 cgoldammer's model predicts that for an intermediate player (roughly 1600 elo) there is a 7% chance of a blunder. For an elo of 1000, there is an 11% chance of a blunder, and for an expert (roughly 2000 elo) there is a 5% chance of a blunder. The model also predicts a 44 centipawn loss for a 1600 player. This seems to imply that almost everyone will find the right move. However, the only move that gives Black a fighting chance is ...Qf4, which is a very difficult tactic to spot. Any other move loses at least 240 centipawns, which fits the criteria of a blunder. It is clear that the projections of the 1900-2200 elo model are more accurate, and most players will be challenged to find ...Qf4.
 
@@ -64,6 +62,6 @@ This project along with the work of cgoldammer strongly indicates that neural ne
 
 Notes and Improvements
 =====
-1) One minor erorr that can occur is the model sometimes classifies a messy position with only one legal move as a complex position. This might be fixable by adding more hand-crafted inputs to the network, like number of legal moves. The program was trained only on the position of the pieces on the board to minimize prior knowledge of chess.
+1) One minor error that can occur is the model sometimes classifies a messy position with only one legal move as a complex position. This might be fixable by adding more hand-crafted inputs to the network, like number of legal moves. The program was trained only on the position of the pieces on the board to minimize prior knowledge of chess.
 
 2) Hyperparameter tuning and model selection - I stuck to the models in the Sabatelli paper and cgoldammer's work, but there might be a better model. 

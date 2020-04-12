@@ -5,7 +5,7 @@ Supervised learning to estimate the complexity of chess positions.
 
 This project is based off of these resources:
 
-1) [Learning to Evaluate Chess Positions with Deep Neural Networks and Limited Lookahead](https://www.ai.rug.nl/~mwiering/GROUP/ARTICLES/ICPRAM_CHESS_DNN_2018.pdf) showing dense neural networks can approximate the Stockfish evaluation function.
+1) [Learning to Evaluate Chess Positions with Deep Neural Networks and Limited Lookahead](https://www.ai.rug.nl/~mwiering/GROUP/ARTICLES/ICPRAM_CHESS_DNN_2018.pdf) by Sabatelli et al. showing dense neural networks can approximate the Stockfish evaluation function.
 2) cgoldammer's work using dense networks to evaluate chess position complexity. [https://github.com/cgoldammer/chess-analysis/blob/master/position_sharpness.ipynb](https://github.com/cgoldammer/chess-analysis/blob/master/position_sharpness.ipynb)
 
 Overview
@@ -26,15 +26,28 @@ Because there are significantly more positions with no error than error, we also
 
 -picture of the training examples by error
 
+Furthermore, this approach gives chessplayers a better sense of the complexity of a position, as complex positions can involve deciding between the best move and an alternative, and the probability of choosing the right move and the cost of choosing the wrong move is more descriptive than mean error.
+
 Network Architecture
 -----
-We split the Kaggle game data into 5 rating categories (<1600, 1600-1900, 1900-2200, 2200-2500, 2500+) and trained five regression models and five classification models. The <1600 elo regression model trained on less data, so it is a 100-5-1 dense model with relu activation and a 20% dropout in each layer except the output, and the classification model is a similar 100-5-2 model but with softmax for the output layer. For the other rating categories, the regression model if a 1048-500-50-1 dense model with relu activation and 20% for all layers except the output, and the classification model is a similar 1048-500-50-2 with a softmax activation in the last layer. The classification models were trained on a dataset of 50% error positions and 50% non-error positions, and the regression models were trained on the error amounts in positions where the error exceeded 0. All models were trained with a learning rate of 0.001.
+We split the Kaggle game data into 5 rating categories (<1600, 1600-1900, 1900-2200, 2200-2500, 2500+) and trained five regression models and five classification models. The <1600 elo regression model trained on less data, so it is a 100-5-1 dense model with relu activation and a 20% dropout in each layer except the output, and the classification model is a similar 100-5-2 model but with softmax for the output layer. For the other rating categories, the regression model is a 1048-500-50-1 dense model with relu activation and 20% for all layers except the output (taken from the Sabatelli paper), and the classification model is a similar 1048-500-50-2 with a softmax activation in the last layer. The classification models were trained on a dataset of 50% error positions and 50% non-error positions, and the regression models were trained on the error amounts in positions where the error exceeded 0. All models were trained with a learning rate of 0.001.
 
 Results
 =====
-Almost all models achieved a 65% classification accuracy on the validation set (around 0.63 categorical cross-entropy loss) and a mean-squared error loss of around 0.06 (about a 0.2 mean absolute error). The models are pretty successful in seperating complex positions from non-complex positions. Complexity is approximated by the probability of an error given by the classification model multiplied by the mean value of the error given by the regression model. However, this is a relative measurement of complexity, not a measure of expected centipawn loss. Below are five of the most complex positions (deemed by the 1900-2200 model, which trained on the most amount of data - roughly 100k positions) along with 5 of the simplest positions chosen out of 1000 random positions from the 2015 World Cup.
+Almost all models achieved a 65% classification accuracy on the test set (around 0.63 categorical cross-entropy loss) and a mean-squared error loss of around 0.06 (about a 0.2 mean absolute error). The models are pretty successful in seperating complex positions from non-complex positions, sometimes making the mistake of classifying a messy position with only one legal move as a complex position. Complexity is approximated by the probability of an error given by the classification model multiplied by the mean value of the error given by the regression model. However, this is a relative measurement of complexity, not a measure of expected centipawn loss. Below are three of the most complex positions (deemed by the 1900-2200 model, which trained on the most amount of data - roughly 100k positions) along with three of the simplest positions chosen out of 1000 random positions from the 2015 World Cup.
 
 -picture of positions
 
 Comparison to Previous Results
 -----
+Despite some methodological changes from the previous work of cgoldammer that in theory should improve performance, such as more stable evaluations (running Stockfish for 1 second/move instead of 0.1 seconds per move) and using two neural networks to better balance the data, there is no significant evidence that this program evaluates complexity better than [cgoldammer's model](https://chessinsights.org/analysis/). Positions evaluated as relatively complicated by this model are likewise evaluated as relatively complicated by the other model. I believe there is little difference in performance because of the vast amount of data used to train the other model (770,000 examples versus 100,000). However, removing bias does seem to have produced more user-friendly predictions. As suspected, cgoldammer's model regression on a training set with a large majority of little error positions has resulted in both a low regression and blunder value.
+
+For instance, take the position in the upper right, estimated to have a chance of error of 77% and an error amount of 73 centipawns. If you are a chessplayer, try to find the best move for Black here.
+
+-insert pictures 
+
+cgoldammer's model predicts that for an intermediate player (roughly 1600 elo) there is a 7% chance of a blunder. For an elo of 1000, there is an 11% chance of a blunder, and for an expert (roughly 2000 elo) there is a 5% chance of a blunder. The model also predicts a 44 centipawn loss for a 1600 player. This seems to imply that almost everyone will find the right move. However, the only move that gives Black a fighting chance is ...Qf4, which is a very difficult tactic to spot. Any other move loses at least 240 centipawns, which fits the criteria of a blunder. It is clear that the projections of the 1900-2200 elo model are more accurate, and most players will be challenged to find ...Qf4.
+
+Applications
+=====
+This project along with the work of cgoldammer strongly indicates that neural networks can classify positions based on their relative difficulty to humans. I believe such a program has massive applications to chess training. 

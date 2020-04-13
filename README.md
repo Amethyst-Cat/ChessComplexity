@@ -23,7 +23,7 @@ A Two-Headed Approach
 -----
 Unlike previous work, which mapped a position to an expected centipawn error using only one dense network, we use two networks, one predicting whether or not the user made an error (the classification network) and one predicting how large an error would be if it were made (the regression network). Due to the massive amount of training examples with 0 error, we chose this approach to give our regression network more flexibility and prevent it from only outputting low error values to minimize mean-squared loss.
 
-Because there are significantly more positions with no error than error, we also trained with a subset of the positions with no error to remove bias from the training set. This prevents the classification network from predicting each position will have no error to minimize categorical loss.
+Because there are significantly more positions with no error than error, we trained the classification network with a subset of the positions with no error to train with a dataset of 50% errors and 50% no errors. This prevents the network from predicting each position will have no error to minimize categorical loss.
 
 ![](images/30errorbelowcutoff.png)
 

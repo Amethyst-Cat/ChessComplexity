@@ -54,7 +54,7 @@ cgoldammer's model predicts that for an intermediate player (roughly 1600 elo) t
 
 Applications
 =====
-This project along with the work of cgoldammer strongly indicates that neural networks can classify positions based on their relative difficulty to humans. Such a program has massive unrealized applications in the chess world, and websites like lichess and chess.com already have millions of computer-analyzed games to realize these opportunities.
+This project along with the work of cgoldammer strongly indicates that neural networks can classify positions based on their relative difficulty to humans. **Such a program has massive unrealized applications in the chess world, and websites like lichess and chess.com already have millions of computer-analyzed games to realize these opportunities.**
 
 1) Chess Training - A program that can rank position difficulties can expand the boundaries of chess puzzles beyond tactics to all types of positions. As users solve more positions, there is no reason why the model can't update itself with this data to provide more personalized training as well.
 

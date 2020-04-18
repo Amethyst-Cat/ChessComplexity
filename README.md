@@ -4,6 +4,8 @@ In this project we build off of the work of [Goldammer](https://github.com/cgold
 
 This page explains the impact of a complexity metric on chess. To view the technical analysis behind this project, go to the [Wiki Analysis Page](https://github.com/Amethyst-Cat/ChessComplexity/wiki/Analysis). To view the demonstration of how complexity can be applied to make a training program, go to the [Wiki Software Page](https://github.com/Amethyst-Cat/ChessComplexity/wiki/Software).
 
+Project developed by David Peng
+
 A Second Chess Revolution
 ====
 The First Chess Revolution: How good is the position?

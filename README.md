@@ -8,7 +8,7 @@ To view the technical analysis behind this project, go to the [Wiki Analysis Pag
 
 To view the demonstration of how complexity can be applied to make a training program, go to the [Wiki Software Page](https://github.com/Amethyst-Cat/ChessComplexity/wiki/Software).
 
-To download the chess training software, go to the [Releases Page](https://github.com/Amethyst-Cat/ChessComplexity/releases).
+To download the chess training software, go to the [Releases Page](https://github.com/Amethyst-Cat/ChessComplexity/releases) and download the ChessOracle1.2 zip file under Assets.
 
 A Second Chess Revolution
 ====

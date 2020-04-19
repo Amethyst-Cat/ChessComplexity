@@ -1,14 +1,20 @@
 About
 ====
+This project created by David Peng.
+
 In this project we build off of the work of [Goldammer](https://github.com/cgoldammer/chess-analysis/blob/master/position_sharpness.ipynb) and confirm that neural networks can estimate position complexity to a high degree of accuracy. We suggest that complexity should be measured as both the probability of making a mistake and the magnitude of a mistake, which provides a less-biased and more comprehensive insight into a position's complexity.
 
 This page explains the impact of a complexity metric on chess. 
 
 To view the technical analysis behind this project, go to the [Wiki Analysis Page](https://github.com/Amethyst-Cat/ChessComplexity/wiki/Analysis). 
 
-To view the demonstration of how complexity can be applied to make a training program, go to the [Wiki Software Page](https://github.com/Amethyst-Cat/ChessComplexity/wiki/Software).
+Accessing the Software
+----
+I have also created a software demonstrating one application of a complexity measure, specifically in generating puzzles from any game.
 
-To download the chess training software, go to the [Releases Page](https://github.com/Amethyst-Cat/ChessComplexity/releases) and download the ChessOracle1.2 zip file under Assets.
+- To find more information about the software, including download instructions, go to the [Wiki Software Page](https://github.com/Amethyst-Cat/ChessComplexity/wiki/Software).
+
+- To download the chess training software, go to the [Releases Page](https://github.com/Amethyst-Cat/ChessComplexity/releases) and download the ChessOracle1.2 zip file under Assets.
 
 A Second Chess Revolution
 ====

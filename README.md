@@ -1,6 +1,6 @@
 About
 ====
-This project created by David Peng.
+This project is created by David Peng.
 
 In this project we build off of the work of [Goldammer](https://github.com/cgoldammer/chess-analysis/blob/master/position_sharpness.ipynb) and confirm that neural networks can estimate position complexity to a high degree of accuracy. We suggest that complexity should be measured as both the probability of making a mistake and the magnitude of a mistake, which provides a less-biased and more comprehensive insight into a position's complexity.
 

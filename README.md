@@ -2,7 +2,13 @@ About
 ====
 In this project we build off of the work of [Goldammer](https://github.com/cgoldammer/chess-analysis/blob/master/position_sharpness.ipynb) and confirm that neural networks can estimate position complexity to a high degree of accuracy. We suggest that complexity should be measured as both the probability of making a mistake and the magnitude of a mistake, which provides a less-biased and more comprehensive insight into a position's complexity.
 
-This page explains the impact of a complexity metric on chess. To view the technical analysis behind this project, go to the [Wiki Analysis Page](https://github.com/Amethyst-Cat/ChessComplexity/wiki/Analysis). To view the demonstration of how complexity can be applied to make a training program, go to the [Wiki Software Page](https://github.com/Amethyst-Cat/ChessComplexity/wiki/Software).
+This page explains the impact of a complexity metric on chess. 
+
+To view the technical analysis behind this project, go to the [Wiki Analysis Page](https://github.com/Amethyst-Cat/ChessComplexity/wiki/Analysis). 
+
+To view the demonstration of how complexity can be applied to make a training program, go to the [Wiki Software Page](https://github.com/Amethyst-Cat/ChessComplexity/wiki/Software).
+
+To download the chess training software, go to the [Releases Page](https://github.com/Amethyst-Cat/ChessComplexity/releases).
 
 A Second Chess Revolution
 ====

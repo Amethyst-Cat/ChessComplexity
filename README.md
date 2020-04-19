@@ -10,7 +10,7 @@ To view the technical analysis behind this project, go to the [Wiki Analysis Pag
 
 Accessing the Software
 ----
-I have also created a software demonstrating one application of a complexity measure, specifically in generating puzzles from any game.
+We have also created a software demonstrating one application of a complexity measure, specifically generating puzzles from any game that go beyond tactics.
 
 - To find more information about the software, including download instructions, go to the [Wiki Software Page](https://github.com/Amethyst-Cat/ChessComplexity/wiki/Software).
 

@@ -18,3 +18,7 @@ We have also created a software demonstrating one application of a complexity me
 - To find more information about the software, including download instructions, go to the [Wiki Software Page](https://github.com/Amethyst-Cat/ChessComplexity/wiki/Software).
 
 - To download the chess training software, go to the [Releases Page](https://github.com/Amethyst-Cat/ChessComplexity/releases) and download the ChessOracle1.2 zip file under Assets.
+
+Code
+----
+You can find a sample of the code used to train the model called TrainModel.py and a sample of the code used to identify complex positions from games called TestModel.py. Data used to train the model can be found on [Kaggle](https://www.kaggle.com/c/finding-elo/data).
